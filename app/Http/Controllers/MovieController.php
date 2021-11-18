@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Actions\MovieAction;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Throwable;
 
 class MovieController extends Controller
 {
@@ -12,10 +14,16 @@ class MovieController extends Controller
      *
      * @return JsonResponse
      */
-    public function getTitles(Request $request): JsonResponse
+    public function getTitles(Request $request, MovieAction $action): JsonResponse
     {
-        // TODO
+        try {
+            $titles = $action->execute();
+            return response()->json($titles);
+        } catch (Throwable $e) {
+            return response()->json([
+                'status' => 'failure'
+            ]);
+        }
 
-        return response()->json([]);
     }
 }
