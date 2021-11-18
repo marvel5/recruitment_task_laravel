@@ -23,11 +23,12 @@ class MovieAction
 
     public function execute(): array
     {
-        if (rand(0, 2) === 0) {
+        $number = rand(0, 2);
+        if ($number === 0) {
             return $this->fooMovieService->getTitles();
-        } else if (rand(0, 2) === 1) {
+        } else if ($number === 1) {
             return $this->barMovieService->getTitles();
-        } else if (rand(0, 2) === 2) {
+        } else if ($number === 2) {
             return $this->bazMovieService->getTitles();
         }
     }
