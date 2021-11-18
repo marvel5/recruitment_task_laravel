@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Http\Actions;
 
@@ -7,7 +7,8 @@ use App\Http\Adapters\BazAdapter;
 use App\Http\Adapters\FooAdapter;
 use Illuminate\Http\Request;
 
-class LoginAction {
+class LoginAction
+{
     protected BarAdapter $barAdapter;
     protected BazAdapter $bazAdapter;
     protected FooAdapter $fooAdapter;
@@ -22,7 +23,7 @@ class LoginAction {
     public function execute(Request $request): bool
     {
         return $this->barAdapter->login($request->login, $request->password) ||
-            $this->bazAdapter->login($request->login, $request->password) || 
+            $this->bazAdapter->login($request->login, $request->password) ||
             $this->fooAdapter->login($request->login, $request->password);
     }
 }

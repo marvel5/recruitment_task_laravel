@@ -24,6 +24,5 @@ class MovieController extends Controller
                 'status' => 'failure'
             ]);
         }
-
     }
 }

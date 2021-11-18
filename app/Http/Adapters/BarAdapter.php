@@ -8,7 +8,7 @@ use External\Bar\Auth\LoginService;
 class BarAdapter implements Login
 {
     private LoginService $service;
-    
+
     public function __construct(LoginService $service)
     {
         $this->service = $service;
