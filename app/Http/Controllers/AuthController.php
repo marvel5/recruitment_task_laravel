@@ -10,6 +10,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Lcobucci\JWT\Builder;
+use Lcobucci\JWT\Signer;
+use Lcobucci\JWT\Signer\Key;
+
+use Lcobucci\JWT\Configuration;
+use Throwable;
 
 class AuthController extends BaseController
 {
@@ -19,7 +25,7 @@ class AuthController extends BaseController
      *
      * @return JsonResponse
      */
-    public function login(Request $request, LoginAction $action): JsonResponse
+    public function login(Request $request): JsonResponse
     {
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json([
@@ -29,18 +35,40 @@ class AuthController extends BaseController
 
         $user = User::where('email', $request['email'])->firstOrFail();
         $token =  $user->createToken('auth_token')->plainTextToken;
-        // if ($action->execute($request)) {
-        //     $accessToken = '';
-        //     return response()->json([
-        //         'status' => 'success',
-        //         'token' => $accessToken
-        //     ]);
-        // }
+
 
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer'
         ], Response::HTTP_OK);
+    }
+
+    public function loginFake(Request $request, LoginAction $action): JsonResponse
+    {
+        if (!$request->has(['login', 'password'])) {
+            return $this->returnFailure();
+        }
+        try {
+            if ($action->execute($request)) {
+                $accessToken = 'jwt-token-her';
+                return response()->json([
+                    'status' => 'success',
+                    'token' => $accessToken
+                ]);
+            }
+
+            return $this->returnFailure();
+        } catch (Throwable $e) {
+            dd($e);
+            return $this->returnFailure();
+        }
+    }
+
+    private function returnFailure (): JsonResponse 
+    {
+        return response()->json([
+            'status' => 'failure'
+        ]);
     }
 
 
