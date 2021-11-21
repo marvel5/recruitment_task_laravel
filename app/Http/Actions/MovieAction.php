@@ -23,7 +23,6 @@ class MovieAction
         $this->fooMovieService = $fooMovieService;
     }
 
-
     public function execute(): array
     {
         if ($this->isCached()) {
