@@ -26,12 +26,13 @@ class MovieAction
 
     public function execute(): array
     {
-        $array1 =  $this->fooMovieService->getTitles();
-        $array2  = Arr::flatten($this->barMovieService->getTitles());
-        $array3 = Arr::flatten($this->bazMovieService->getTitles());
         if ($this->isCached()) {
             return  Cache::get(self::MOVIES_CACHE_KEY);
         }
+
+        $array1 =  $this->fooMovieService->getTitles();
+        $array2  = Arr::flatten($this->barMovieService->getTitles());
+        $array3 = Arr::flatten($this->bazMovieService->getTitles());
         $movies = Arr::collapse([$array1, $array2, $array3]);
         Cache::put('movies', $movies, 3600);
         return $movies;
