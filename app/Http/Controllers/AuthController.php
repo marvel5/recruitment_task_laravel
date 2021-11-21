@@ -59,7 +59,6 @@ class AuthController extends BaseController
 
             return $this->returnFailure();
         } catch (Throwable $e) {
-            dd($e);
             return $this->returnFailure();
         }
     }
