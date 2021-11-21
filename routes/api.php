@@ -15,6 +15,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login'])->name('login');
 
-Route::get('titles', [MovieController::class, 'getTitles']);
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/user', [AuthController::class, 'user']);
+    Route::get('/titles', [MovieController::class, 'getTitles']);
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+});
