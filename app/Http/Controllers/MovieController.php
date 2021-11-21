@@ -17,8 +17,7 @@ class MovieController extends Controller
     public function getTitles(Request $request, MovieAction $action): JsonResponse
     {
         try {
-            $titles = $action->execute();
-            return response()->json($titles);
+            return response()->json($action->execute());
         } catch (Throwable $e) {
             return response()->json([
                 'status' => 'failure'

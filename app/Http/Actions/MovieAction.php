@@ -5,6 +5,8 @@ namespace App\Http\Actions;
 use External\Bar\Movies\MovieService;
 use External\Baz\Movies\MovieService as BazMovieService;
 use External\Foo\Movies\MovieService as FooMovieService;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 
 class MovieAction
 {
@@ -12,6 +14,7 @@ class MovieAction
     protected MovieService $barMovieService;
     protected BazMovieService $bazMovieService;
     protected FooMovieService $fooMovieService;
+    private const MOVIES_CACHE_KEY = 'movies';
 
     public function __construct(MovieService $barMovieService, BazMovieService $bazMovieService, FooMovieService $fooMovieService)
     {
@@ -20,16 +23,26 @@ class MovieAction
         $this->fooMovieService = $fooMovieService;
     }
 
-
     public function execute(): array
     {
-        $number = rand(0, 2);
-        if ($number === 0) {
-            return $this->fooMovieService->getTitles();
-        } else if ($number === 1) {
-            return $this->barMovieService->getTitles();
-        } else if ($number === 2) {
-            return $this->bazMovieService->getTitles();
+        if ($this->isCached()) {
+            return  Cache::get(self::MOVIES_CACHE_KEY);
         }
+        Cache::put('movies', $this->collapseMovies(), 3600);
+        return $this->collapseMovies();
+    }
+
+    protected function isCached(): bool
+    {
+        return Cache::has(self::MOVIES_CACHE_KEY);
+    }
+
+    protected function collapseMovies(): array
+    {
+        return Arr::collapse([
+            $this->fooMovieService->getTitles(),
+            Arr::flatten($this->barMovieService->getTitles()), 
+            Arr::flatten($this->bazMovieService->getTitles())
+        ]);
     }
 }
