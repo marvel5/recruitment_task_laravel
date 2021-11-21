@@ -5,6 +5,7 @@ namespace App\Http\Actions;
 use External\Bar\Movies\MovieService;
 use External\Baz\Movies\MovieService as BazMovieService;
 use External\Foo\Movies\MovieService as FooMovieService;
+use Illuminate\Support\Arr;
 
 class MovieAction
 {
@@ -23,13 +24,9 @@ class MovieAction
 
     public function execute(): array
     {
-        $number = rand(0, 2);
-        if ($number === 0) {
-            return $this->fooMovieService->getTitles();
-        } else if ($number === 1) {
-            return $this->barMovieService->getTitles();
-        } else if ($number === 2) {
-            return $this->bazMovieService->getTitles();
-        }
+        $array1 =  $this->fooMovieService->getTitles();
+        $array2  = Arr::flatten($this->barMovieService->getTitles());
+        $array3 = Arr::flatten($this->bazMovieService->getTitles());
+        return Arr::collapse([$array1, $array2, $array3]);
     }
 }
