@@ -29,13 +29,8 @@ class MovieAction
         if ($this->isCached()) {
             return  Cache::get(self::MOVIES_CACHE_KEY);
         }
-
-        $array1 =  $this->fooMovieService->getTitles();
-        $array2  = Arr::flatten($this->barMovieService->getTitles());
-        $array3 = Arr::flatten($this->bazMovieService->getTitles());
-        $movies = Arr::collapse([$array1, $array2, $array3]);
-        Cache::put('movies', $movies, 3600);
-        return $movies;
+        Cache::put('movies', $this->collapseMovies(), 3600);
+        return $this->collapseMovies();
     }
 
     protected function isCached(): bool
@@ -43,4 +38,12 @@ class MovieAction
         return Cache::has(self::MOVIES_CACHE_KEY);
     }
 
+    protected function collapseMovies(): array
+    {
+        return Arr::collapse([
+            $this->fooMovieService->getTitles(),
+            Arr::flatten($this->barMovieService->getTitles()), 
+            Arr::flatten($this->bazMovieService->getTitles())
+        ]);
+    }
 }
