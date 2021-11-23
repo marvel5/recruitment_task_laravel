@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+use Modules\Movie\Http\Controllers\MovieController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -13,3 +13,5 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::get('/titles', [MovieController::class, 'getTitles']);
