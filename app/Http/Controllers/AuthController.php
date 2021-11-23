@@ -4,26 +4,36 @@ namespace App\Http\Controllers;
 
 use App\Http\Actions\LoginAction;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Lcobucci\JWT\Builder;
-use Lcobucci\JWT\Signer;
-use Lcobucci\JWT\Signer\Key;
-
-use Lcobucci\JWT\Configuration;
 use Throwable;
 
 class AuthController extends BaseController
 {
     /**
-     * @param Request $request
-     * @param LoginAction $action
-     *
-     * @return JsonResponse
+     * @OA\Post(
+     *      path="api/login",
+     *      operationId="getProjectsList",
+     *      tags={"Projects"},
+     *      summary="Get list of projects",
+     *      description="Returns list of projects",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     *     )
      */
     public function login(Request $request): JsonResponse
     {
@@ -63,7 +73,7 @@ class AuthController extends BaseController
         }
     }
 
-    private function returnFailure (): JsonResponse 
+    private function returnFailure(): JsonResponse
     {
         return response()->json([
             'status' => 'failure'
