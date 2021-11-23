@@ -4,26 +4,54 @@ namespace App\Http\Controllers;
 
 use App\Http\Actions\LoginAction;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Lcobucci\JWT\Builder;
-use Lcobucci\JWT\Signer;
-use Lcobucci\JWT\Signer\Key;
-
-use Lcobucci\JWT\Configuration;
 use Throwable;
 
-class AuthController extends BaseController
+class AuthController extends Controller
 {
     /**
-     * @param Request $request
-     * @param LoginAction $action
-     *
-     * @return JsonResponse
+     * @OA\Post(
+     *      path="/api/login",
+     *      operationId="login",
+     *      tags={"auth"},
+     *      summary="Sign In",
+     *      description="Login by email and password",
+     *      @OA\RequestBody(
+     *        required=true,
+     *        @OA\JsonContent(
+     *          type="string",
+     *          required={"email", "password"},
+     *          @OA\Property(
+     *            property="email",
+     *            type="string",
+     *            format="email",
+     *            example="email@test.com"
+     *          ),
+     *          @OA\Property(
+     *            property="password",
+     *            type="string",
+     *            format="password",
+     *            example="test"
+     *          )
+     *        )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     *     )
      */
     public function login(Request $request): JsonResponse
     {
@@ -35,7 +63,6 @@ class AuthController extends BaseController
 
         $user = User::where('email', $request['email'])->firstOrFail();
         $token =  $user->createToken('auth_token')->plainTextToken;
-
 
         return response()->json([
             'access_token' => $token,
@@ -63,7 +90,7 @@ class AuthController extends BaseController
         }
     }
 
-    private function returnFailure (): JsonResponse 
+    private function returnFailure(): JsonResponse
     {
         return response()->json([
             'status' => 'failure'
