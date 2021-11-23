@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Movies;
+namespace Modules\Movie\Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;

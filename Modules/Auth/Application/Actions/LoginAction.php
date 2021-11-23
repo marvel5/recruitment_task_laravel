@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Actions;
+namespace Modules\Auth\Application\Actions;
 
 use App\Http\Adapters\BarAdapter;
 use App\Http\Adapters\BazAdapter;
