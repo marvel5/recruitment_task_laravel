@@ -1,18 +1,42 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "My First API",
+        "title": "Laravel Project",
         "version": "0.1"
     },
     "paths": {
-        "api/login": {
+        "/api/login": {
             "post": {
                 "tags": [
-                    "Projects"
+                    "auth"
                 ],
-                "summary": "Get list of projects",
-                "description": "Returns list of projects",
-                "operationId": "getProjectsList",
+                "summary": "Sign In",
+                "description": "Login by email and password",
+                "operationId": "login",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password"
+                                    }
+                                },
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Successful operation"
