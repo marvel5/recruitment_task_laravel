@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Actions;
+namespace Modules\Movie\Http\Actions;
 
 use External\Bar\Movies\MovieService;
 use External\Baz\Movies\MovieService as BazMovieService;
@@ -41,7 +41,7 @@ class MovieAction
     {
         return Arr::collapse([
             $this->fooMovieService->getTitles(),
-            Arr::flatten($this->barMovieService->getTitles()), 
+            Arr::flatten($this->barMovieService->getTitles()),
             Arr::flatten($this->bazMovieService->getTitles())
         ]);
     }
