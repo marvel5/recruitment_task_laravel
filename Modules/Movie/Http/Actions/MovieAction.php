@@ -7,6 +7,7 @@ use External\Baz\Movies\MovieService as BazMovieService;
 use External\Foo\Movies\MovieService as FooMovieService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
+use Modules\Movie\Definitions\MovieDefinition;
 
 class MovieAction
 {
@@ -14,7 +15,7 @@ class MovieAction
     protected MovieService $barMovieService;
     protected BazMovieService $bazMovieService;
     protected FooMovieService $fooMovieService;
-    private const MOVIES_CACHE_KEY = 'movies';
+
 
     public function __construct(MovieService $barMovieService, BazMovieService $bazMovieService, FooMovieService $fooMovieService)
     {
@@ -26,7 +27,7 @@ class MovieAction
     public function execute(): array
     {
         if ($this->isCached()) {
-            return  Cache::get(self::MOVIES_CACHE_KEY);
+            return  Cache::get(MovieDefinition::MOVIES_CACHE_KEY);
         }
         Cache::put('movies', $this->collapseMovies(), 3600);
         return $this->collapseMovies();
@@ -34,7 +35,7 @@ class MovieAction
 
     protected function isCached(): bool
     {
-        return Cache::has(self::MOVIES_CACHE_KEY);
+        return Cache::has(MovieDefinition::MOVIES_CACHE_KEY);
     }
 
     protected function collapseMovies(): array
